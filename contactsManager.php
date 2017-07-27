@@ -62,8 +62,18 @@ function viewContacts()
 {
 
   $fileName = "contacts.txt";
-  $handle = fopen($fileName, 'a+');
+  $handle = fopen($fileName, 'r');
   $contacts = fread($handle, filesize($fileName));
+
+  $formatArray = explode("\n", $contacts);
+
+  $heading = PHP_EOL . "   Name    |   Number" . PHP_EOL.
+              "--------------------------";
+
+  array_unshift($formatArray, $heading);
+
+  echo implode("\n", $formatArray) . PHP_EOL;
+
 
   // create info arrays
   // explode contact string by \n and save
@@ -79,7 +89,7 @@ function viewContacts()
   // output the string
 
 
-  fwrite(STDOUT, $contacts.PHP_EOL) ;
+  // fwrite(STDOUT, $contacts.PHP_EOL) ;
 
 
   menuOptions();

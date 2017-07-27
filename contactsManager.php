@@ -13,15 +13,17 @@
 // }
 //
 //
+viewContacts();
+
 function menuOptions()
 {
   fwrite(STDOUT,
-
+    PHP_EOL .
     "1) View Contacts" . PHP_EOL .
     "2) Add Contact" . PHP_EOL .
     "3) Search Name" . PHP_EOL .
     "4) NUKE Contact" . PHP_EOL .
-    "5) Exit" . PHP_EOL . PHP_EOL . 
+    "5) Exit" . PHP_EOL . PHP_EOL .
    "Please enter a number to select an option:  "
   );
 
@@ -60,46 +62,45 @@ function menuOptions()
 
 function viewContacts()
 {
-
+  system('clear');
   $fileName = "contacts.txt";
   $handle = fopen($fileName, 'r');
   $contacts = fread($handle, filesize($fileName));
+  $contacts = trim($contacts);
 
+  //table heading
+  $line1 = str_pad("CONTACTS", 50, "-", STR_PAD_BOTH);
+  $line2 = str_pad("NAME", 24, " ", STR_PAD_RIGHT) . "|" . str_pad("NUMBER", 25, " ", STR_PAD_LEFT);
+  $line3 = str_pad("", 50, "-", STR_PAD_BOTH);
+  $heading = $line1 . PHP_EOL . PHP_EOL . $line2 . PHP_EOL . $line3 . PHP_EOL;
+
+  //explode data for table formatting
   $formatArray = explode("\n", $contacts);
+  $arrayArrays = [];
+  foreach($formatArray as $key => $value) {
+    $arrayArrays[$key] = explode("|", $value);
+  }
 
-  $heading = PHP_EOL . "   Name    |   Number" . PHP_EOL.
-              "--------------------------";
-
-  array_unshift($formatArray, $heading);
-
-  echo implode("\n", $formatArray) . PHP_EOL;
-
-
-  // create info arrays
-  // explode contact string by \n and save
-  // $contactsArray = explode("\n", $contacts);
-  // print_r($contactsArray);
-  // explode string arrays by | into contact arrays
-  //
-  // build output
-  // create table heading "CONTACTS"
-  // create table columns with "Contact", "Number"
-  // create formatted strings with foreach loop
-  // concatenate everything into a string
-  // output the string
-
-
-  // fwrite(STDOUT, $contacts.PHP_EOL) ;
+  //echo to print table
+  echo $heading;
+  foreach($arrayArrays as $key => $value) {
+    echo str_pad($value[0], 24, " ", STR_PAD_RIGHT);
+    echo "|";
+    echo str_pad($value[1], 25, " ", STR_PAD_LEFT) . PHP_EOL;
+  }
 
 
   menuOptions();
 }
 
-viewContacts();
+
 
 
 function addContact()
 {
+  system('clear');
+
+
   $fileName = "contacts.txt";
   $handle = fopen($fileName, 'a+');
   $contacts = fread($handle, filesize($fileName));
@@ -117,6 +118,7 @@ function addContact()
 
   fclose($handle);
 
+  viewContacts();
   menuOptions();
 
 }
@@ -124,6 +126,8 @@ function addContact()
 
 function searchName()
 {
+  system('clear');
+
   $fileName = "contacts.txt";
   $handle = fopen($fileName, 'a+');
   $contacts = fread($handle, filesize($fileName));
@@ -143,6 +147,8 @@ function searchName()
     }
   }
   fclose($handle);
+
+  viewContacts();
   menuOptions();
 }
 
@@ -150,11 +156,12 @@ function searchName()
 
 function deleteContact()
 {
+
   $fileName = "contacts.txt";
   $handle = fopen($fileName, 'a+');
   $contacts = fread($handle, filesize($fileName));
   $contacts = trim($contacts);
-  
+
 
   $contactsArray = explode("\n", $contacts);
 
@@ -174,5 +181,7 @@ function deleteContact()
   $handle = fopen($fileName, 'w');
   fwrite($handle, $contactString);
   fclose($handle);
+
+  viewContacts();
   menuOptions();
 }

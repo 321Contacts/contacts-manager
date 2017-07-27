@@ -1,32 +1,35 @@
 <?php
 
 //we will make 5 distinct functions for each option in the menu
+startSession("contacts.txt");
 
-
-function startSession($fileName) {
-  //retrieve info on session_start, open method a+ (read and write. pointer at the end of the file, create if not existent)
+function startSession($fileName) 
+{
   $handle = fopen($fileName, 'a+');
   $contacts = fread($handle, filesize($fileName));
-  viewContacts($contacts);
+  fwrite(STDOUT, $contacts);
+  // viewContacts($contacts);
   menuOptions();
+  return $handle;
 }
 
 
 function menuOptions() 
 {
-  //print menu of options
-  fwrite(STDOUT, "Please enter a number to select an option.".PHP_EOL);
-  fwrite(STDOUT, "1) View Contacts".PHP_EOL);
-  fwrite(STDOUT, "2) Add Contact".PHP_EOL);
-  fwrite(STDOUT, "3) Search Name".PHP_EOL);
-  fwrite(STDOUT, "4) NUKE Contact".PHP_EOL);
-  fwrite(STDOUT, "5) Exit".PHP_EOL);
+  fwrite(STDOUT, "Please enter a number to select an option.".PHP_EOL .
+    "1) View Contacts" . PHP_EOL .
+    "2) Add Contact" . PHP_EOL .
+    "3) Search Name" . PHP_EOL .
+    "4) NUKE Contact" . PHP_EOL .
+    "5) Exit" . PHP_EOL);
+
   $input = fgets(STDIN);
   
 
   switch ($input) {
     case 1:
-      viewContacts();
+      // viewContacts($contacts);
+      startSession("contacts.txt");
       break;
 
     case 2:
@@ -51,24 +54,26 @@ function menuOptions()
 
 }
 
-function viewContacts($contacts) {
-  //print a list
+function viewContacts($contacts) 
+{
   fwrite(STDOUT, $contacts) ;
 }
 
-function addContact() {
+function addContact() 
+{
   echo "Contact added :)" . PHP_EOL;
   menuOptions();
 }
 
-function searchName() {
+function searchName() 
+{
   echo "Name searched" . PHP_EOL;
   menuOptions();
 }
 
-function deleteContact() {
+function deleteContact() 
+{
   echo "Contact Deleted" . PHP_EOL;
   menuOptions();
 }
 
-startSession("contacts.txt");

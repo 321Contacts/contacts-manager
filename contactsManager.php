@@ -13,57 +13,67 @@
 // }
 //
 //
-// function menuOptions($contacts)
-// {
-//   fwrite(STDOUT,
-//
-//     "1) View Contacts" . PHP_EOL .
-//     "2) Add Contact" . PHP_EOL .
-//     "3) Search Name" . PHP_EOL .
-//     "4) NUKE Contact" . PHP_EOL .
-//     "5) Exit" . PHP_EOL .
-//    "Please enter a number to select an option:  ");
-//
-//   $input = fgets(STDIN);
-//
-//
-//   switch ($input) {
-//     case 1:
-//       viewContacts($contacts);
-//
-//       break;
-//
-//     case 2:
-//       addContact($contacts);
-//
-//       break;
-//
-//     case 3:
-//       searchName($contacts);
-//
-//       break;
-//
-//     case 4:
-//       deleteContact($contacts);
-//
-//
-//     case 5:
-//       exit;
-//
-//     default:
-//       echo "Please enter a valid number between 1 and 5" . PHP_EOL;
-//       menuOptions();
-//       break;
-//   }
-//
-// }
+function menuOptions()
+{
+  fwrite(STDOUT,
+
+    "1) View Contacts" . PHP_EOL .
+    "2) Add Contact" . PHP_EOL .
+    "3) Search Name" . PHP_EOL .
+    "4) NUKE Contact" . PHP_EOL .
+    "5) Exit" . PHP_EOL . PHP_EOL . 
+   "Please enter a number to select an option:  "
+  );
+
+  $input = fgets(STDIN);
+
+
+  switch ($input) {
+    case 1:
+      viewContacts();
+
+      break;
+
+    case 2:
+      addContact();
+
+      break;
+
+    case 3:
+      searchName();
+
+      break;
+
+    case 4:
+      deleteContact();
+
+    case 5:
+      exit;
+
+    default:
+      echo "Please enter a valid number between 1 and 5" . PHP_EOL;
+      menuOptions();
+      break;
+  }
+
+}
 
 function viewContacts()
 {
 
   $fileName = "contacts.txt";
-  $handle = fopen($fileName, 'a+');
+  $handle = fopen($fileName, 'r');
   $contacts = fread($handle, filesize($fileName));
+
+  $formatArray = explode("\n", $contacts);
+
+  $heading = PHP_EOL . "   Name    |   Number" . PHP_EOL.
+              "--------------------------";
+
+  array_unshift($formatArray, $heading);
+
+  echo implode("\n", $formatArray) . PHP_EOL;
+
 
   // create info arrays
   // explode contact string by \n and save
@@ -79,11 +89,12 @@ function viewContacts()
   // output the string
 
 
-  fwrite(STDOUT, $contacts.PHP_EOL) ;
+  // fwrite(STDOUT, $contacts.PHP_EOL) ;
 
 
-  // menuOptions($contacts);
+  menuOptions();
 }
+
 viewContacts();
 
 
@@ -93,20 +104,20 @@ function addContact()
   $handle = fopen($fileName, 'a+');
   $contacts = fread($handle, filesize($fileName));
 
-  echo "Contact added :)" . PHP_EOL;
-
-  fwrite(STDOUT, "Please enter first name.");
+  fwrite(STDOUT, "Please enter first name:  ");
   $firstName = trim(fgets(STDIN));
 
-  fwrite(STDOUT, "Please enter last name.");
+  fwrite(STDOUT, "Please enter last name: ");
   $lastName = trim(fgets(STDIN));
 
-  fwrite(STDOUT, "Please enter phone number.");
+  fwrite(STDOUT, "Please enter phone number:  ");
   $phoneNumber = fgets(STDIN);
 
   fwrite($handle, $firstName . " " . $lastName . "|" . $phoneNumber);
 
   fclose($handle);
+
+  menuOptions();
 
 }
 
@@ -120,17 +131,19 @@ function searchName()
 
   $contactsArray = explode("\n", $contacts);
 
-  fwrite(STDOUT, "Enter name to search for contact:  ");
+  fwrite(STDOUT, "Enter name to search for contact: ") ;
   $searchingFor = trim(fgets(STDIN));
 
   foreach($contactsArray as $key => $value){
     if (strpos(strtolower($value), strtolower($searchingFor)) !== false) {
-      echo $value;
+      echo PHP_EOL . $value . PHP_EOL . PHP_EOL;
 
     } else {
-       echo "not found";
+       // echo "not found";
     }
   }
+  fclose($handle);
+  menuOptions();
 }
 
 
@@ -141,11 +154,11 @@ function deleteContact()
   $handle = fopen($fileName, 'a+');
   $contacts = fread($handle, filesize($fileName));
   $contacts = trim($contacts);
-  // fclose($handle);
+  
 
   $contactsArray = explode("\n", $contacts);
 
-  fwrite(STDOUT, "Enter a name to NUKE:  ");
+  fwrite(STDOUT, "Enter a name to NUKE: ");
   $searchingFor = trim(fgets(STDIN));
 
   foreach($contactsArray as $key => $value) {
@@ -160,5 +173,6 @@ function deleteContact()
   $contactString = implode("\n", $contactsArray) .PHP_EOL;
   $handle = fopen($fileName, 'w');
   fwrite($handle, $contactString);
-
+  fclose($handle);
+  menuOptions();
 }

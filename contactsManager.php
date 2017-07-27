@@ -15,12 +15,14 @@ function startSession($fileName)
 
 function menuOptions($contacts)
 {
-  fwrite(STDOUT, "Please enter a number to select an option.".PHP_EOL .
+  fwrite(STDOUT,
+
     "1) View Contacts" . PHP_EOL .
     "2) Add Contact" . PHP_EOL .
     "3) Search Name" . PHP_EOL .
     "4) NUKE Contact" . PHP_EOL .
-    "5) Exit" . PHP_EOL);
+    "5) Exit" . PHP_EOL .
+   "Please enter a number to select an option:  ");
 
   $input = fgets(STDIN);
 
@@ -58,7 +60,18 @@ function menuOptions($contacts)
 
 function viewContacts($contacts)
 {
-  fwrite(STDOUT, $contacts) ;
+  // create info arrays
+  // explode contact string by \n and save
+  // explode string arrays by | into contact arrays
+
+  // build output
+  // create table heading "CONTACTS"
+  // create table columns with "Contact", "Number"
+  // create formatted strings with foreach loop
+  // concatenate everything into a string
+  // output the string
+
+  fwrite(STDOUT, $contacts.PHP_EOL) ;
   menuOptions($contacts);
 }
 

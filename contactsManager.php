@@ -12,22 +12,41 @@ function startSession($fileName) {
 }
 
 
-function menuOptions() {
+function menuOptions() 
+{
   //print menu of options
   fwrite(STDOUT, "Please enter a number to select an option.".PHP_EOL);
   fwrite(STDOUT, "1) View Contacts".PHP_EOL);
   fwrite(STDOUT, "2) Add Contact".PHP_EOL);
-  fwrite(STDOUT, "3) Add Contact".PHP_EOL);
+  fwrite(STDOUT, "3) Search Name".PHP_EOL);
+  fwrite(STDOUT, "4) NUKE Contact".PHP_EOL);
+  fwrite(STDOUT, "5) Exit".PHP_EOL);
   $input = fgets(STDIN);
   
-  if ($input == 2) {
-    addContacts();
-  }
-  if ($input == 2) {
-    addContacts();
-  }
-  if ($input == 2) {
-    addContacts();
+
+  switch ($input) {
+    case 1:
+      viewContacts();
+      break;
+
+    case 2:
+      addContact();
+      break;
+
+    case 3:
+      searchName();
+      break;
+
+    case 4:
+      deleteContact();
+
+    case 5:
+      exit; 
+
+    default:
+      echo "Please enter a valid number between 1 and 5" . PHP_EOL;
+      menuOptions();
+      break;
   }
 
 }
@@ -37,16 +56,19 @@ function viewContacts($contacts) {
   fwrite(STDOUT, $contacts) ;
 }
 
-function addContacts() {
-  //add a contacts
-  echo "Contact added :)";
+function addContact() {
+  echo "Contact added :)" . PHP_EOL;
+  menuOptions();
 }
 
 function searchName() {
-  //search by name
+  echo "Name searched" . PHP_EOL;
+  menuOptions();
 }
 
 function deleteContact() {
-  //delete contact
+  echo "Contact Deleted" . PHP_EOL;
+  menuOptions();
 }
+
 startSession("contacts.txt");

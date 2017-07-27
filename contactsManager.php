@@ -142,11 +142,11 @@ function searchName()
   $searchingFor = trim(fgets(STDIN));
 
   foreach($contactsArray as $key => $value){
-    if (strpos(strtolower($value), strtolower($searchingFor)) !== false) {  
+    if (strpos(strtolower($value), strtolower($searchingFor)) !== false) {
       echo $value;
 
     } else {
-       echo "not found"; 
+       echo "not found";
     }
   }
 
@@ -160,33 +160,35 @@ function searchName()
 }
 
 
-searchName();
+// searchName();
 
 
-function deleteContact($contacts)
+function deleteContact()
 {
-  echo "Contact Deleted" . PHP_EOL;
-  viewContacts($contacts);
-  menuOptions($contacts);
+  $fileName = "contacts.txt";
+  $handle = fopen($fileName, 'a+');
+  $contacts = fread($handle, filesize($fileName));
+  $contacts = trim($contacts);
+  // fclose($handle);
+
+  $contactsArray = explode("\n", $contacts);
+
+  fwrite(STDOUT, "Enter a name to NUKE:  ");
+  $searchingFor = trim(fgets(STDIN));
+
+  foreach($contactsArray as $key => $value) {
+    if (strpos(strtolower($value), strtolower($searchingFor)) !== false) {
+      $searchKey = $key;
+    } else {
+      // echo "not found";
+    }
+  }
+
+  unset($contactsArray[$searchKey]);
+  $contactString = implode("\n", $contactsArray) .PHP_EOL;
+  $handle = fopen($fileName, 'w');
+  fwrite($handle, $contactString);
+
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+deleteContact();

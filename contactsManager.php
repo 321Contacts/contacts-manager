@@ -3,18 +3,17 @@
 //we will make 5 distinct functions for each option in the menu
 startSession("contacts.txt");
 
-function startSession($fileName) 
+function startSession($fileName)
 {
   $handle = fopen($fileName, 'a+');
   $contacts = fread($handle, filesize($fileName));
-  fwrite(STDOUT, $contacts);
-  // viewContacts($contacts);
-  menuOptions();
-  return $handle;
+  viewContacts($contacts);
+  menuOptions($contacts);
+  return $contacts;
 }
 
 
-function menuOptions() 
+function menuOptions($contacts)
 {
   fwrite(STDOUT, "Please enter a number to select an option.".PHP_EOL .
     "1) View Contacts" . PHP_EOL .
@@ -24,27 +23,30 @@ function menuOptions()
     "5) Exit" . PHP_EOL);
 
   $input = fgets(STDIN);
-  
+
 
   switch ($input) {
     case 1:
-      // viewContacts($contacts);
-      startSession("contacts.txt");
+      viewContacts($contacts);
+
       break;
 
     case 2:
-      addContact();
+      addContact($contacts);
+
       break;
 
     case 3:
-      searchName();
+      searchName($contacts);
+
       break;
 
     case 4:
-      deleteContact();
+      deleteContact($contacts);
+
 
     case 5:
-      exit; 
+      exit;
 
     default:
       echo "Please enter a valid number between 1 and 5" . PHP_EOL;
@@ -54,26 +56,31 @@ function menuOptions()
 
 }
 
-function viewContacts($contacts) 
+function viewContacts($contacts)
 {
   fwrite(STDOUT, $contacts) ;
+  menuOptions($contacts);
 }
 
-function addContact() 
+function addContact($contacts)
 {
   echo "Contact added :)" . PHP_EOL;
-  menuOptions();
+
+
+  viewContacts($contacts);
+  menuOptions($contacts);
 }
 
-function searchName() 
+function searchName($contacts)
 {
   echo "Name searched" . PHP_EOL;
-  menuOptions();
+  viewContacts($contacts);
+  menuOptions($contacts);
 }
 
-function deleteContact() 
+function deleteContact($contacts)
 {
   echo "Contact Deleted" . PHP_EOL;
-  menuOptions();
+  viewContacts($contacts);
+  menuOptions($contacts);
 }
-

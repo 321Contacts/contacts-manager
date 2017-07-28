@@ -61,15 +61,24 @@ function menuOptions()
 
 }
 
-function viewContacts()
+function readContacts()
 {
-  system('clear');
+  clearstatcache();
   $fileName = "contacts.txt";
   $handle = fopen($fileName, 'r');
   $contacts = fread($handle, filesize($fileName));
   fclose($handle);
   $contacts = trim($contacts);
-  var_dump($contacts);
+  return $contacts;
+}
+
+
+
+function viewContacts()
+{
+  system('clear');
+
+  $contacts = readContacts();
 
   //table heading
   $line1 = "\e[31m" . str_pad("CONTACTS", 50, "-", STR_PAD_BOTH);
@@ -81,23 +90,18 @@ function viewContacts()
   $formatArray = explode("\n", $contacts);
   // $arrayArrays = [];
 
-
-  // foreach($formatArray as $key => $value) {
-  //   $arrayArrays[$key] = explode("|", $value);
-  //   $arrayArrays[$key][1] = substr($arrayArrays[$key][1], 0, 3) . "-" . substr($arrayArrays[$key][1], 3, 3) . "-" . substr($arrayArrays[$key][1], 6);
-  // }
-
-  // print_r($formatArray);
+  foreach($formatArray as $key => $value) {
+    $arrayArrays[$key] = explode("|", $value);
+    $arrayArrays[$key][1] = substr($arrayArrays[$key][1], 0, 3) . "-" . substr($arrayArrays[$key][1], 3, 3) . "-" . substr($arrayArrays[$key][1], 6);
+  }
 
   //echo to print table
-  // echo $heading;
-  // foreach($arrayArrays as $key => $value) {
-  //   echo str_pad($value[0], 24, " ", STR_PAD_RIGHT);
-  //   echo "|";
-  //   echo str_pad($value[1], 25, " ", STR_PAD_LEFT) . PHP_EOL;
-  // }
-
-  // print_r($arrayArrays);
+  echo $heading;
+  foreach($arrayArrays as $key => $value) {
+    echo str_pad($value[0], 24, " ", STR_PAD_RIGHT);
+    echo "|";
+    echo str_pad($value[1], 25, " ", STR_PAD_LEFT) . PHP_EOL;
+  }
  
   menuOptions();
 }
@@ -130,12 +134,8 @@ function addContact()
 
 function searchName()
 {
-  system('clear');
-
-  $fileName = "contacts.txt";
-  $handle = fopen($fileName, 'a+');
-  $contacts = fread($handle, filesize($fileName));
-  $contacts = trim($contacts);
+ 
+  $contacts = readContacts();
 
   $contactsArray = explode("\n", $contacts);
 
@@ -150,7 +150,7 @@ function searchName()
        // echo "not found";
     }
   }
-  fclose($handle);
+
 
   menuOptions();
 }
@@ -160,11 +160,13 @@ function searchName()
 function deleteContact()
 {
 
-  $fileName = "contacts.txt";
-  $handle = fopen($fileName, 'a+');
-  $contacts = fread($handle, filesize($fileName));
-  $contacts = trim($contacts);
+  // $fileName = "contacts.txt";
+  // $handle = fopen($fileName, 'a+');
+  // $contacts = fread($handle, filesize($fileName));
+  // fclose($handle);
+  // $contacts = trim($contacts);
 
+  $contacts = readContacts();
 
   $contactsArray = explode("\n", $contacts);
 
@@ -178,6 +180,7 @@ function deleteContact()
       // echo "not found";
     }
   }
+
 
   unset($contactsArray[$searchKey]);
   $contactString = implode("\n", $contactsArray) .PHP_EOL;

@@ -79,7 +79,9 @@ function viewContacts()
   $arrayArrays = [];
   foreach($formatArray as $key => $value) {
     $arrayArrays[$key] = explode("|", $value);
+    $arrayArrays[$key][1] = substr($arrayArrays[$key][1], 0, 3) . "-" . substr($arrayArrays[$key][1], 3, 3) . "-" . substr($arrayArrays[$key][1], 6);
   }
+
 
   //echo to print table
   echo $heading;

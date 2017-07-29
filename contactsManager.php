@@ -1,23 +1,9 @@
 <?php
 
-//we will make 5 distinct functions for each option in the menu
-// startSession("contacts.txt");
-//
-// function startSession($fileName)
-// {
-//   $handle = fopen($fileName, 'a+');
-//   $contacts = fread($handle, filesize($fileName));
-//   viewContacts($contacts);
-//   menuOptions($contacts);
-//   return $contacts;
-// }
-//
-//
 viewContacts();
 
 function menuOptions()
 {
-
   fwrite(STDOUT,
     PHP_EOL .
     "1) View Contacts" . PHP_EOL .
@@ -29,7 +15,6 @@ function menuOptions()
   );
 
   $input = fgets(STDIN);
-
 
   switch ($input) {
     case 1:
@@ -73,7 +58,6 @@ function readContacts()
 }
 
 
-
 function viewContacts()
 {
   system('clear');
@@ -98,11 +82,12 @@ function viewContacts()
   //echo to print table
   echo $heading;
   foreach($arrayArrays as $key => $value) {
-    echo str_pad($value[0], 24, " ", STR_PAD_RIGHT);
+    echo str_pad(mb_strimwidth($value[0],0,22), 24, " ", STR_PAD_RIGHT);
     echo "|";
     echo str_pad($value[1], 25, " ", STR_PAD_LEFT) . PHP_EOL;
+    echo "\e[31m" . str_pad("", 50, "-", STR_PAD_BOTH) . "\e[0m" . PHP_EOL;
   }
- 
+
   menuOptions();
 }
 
@@ -120,21 +105,24 @@ function addContact()
   fwrite(STDOUT, "Please enter last name: ");
   $lastName = trim(fgets(STDIN));
 
-  fwrite(STDOUT, "Please enter phone number:  ");
-  $phoneNumber = fgets(STDIN);
+  do {
+    fwrite(STDOUT, "Please enter a 10 digit phone number:  ");
+    $phoneNumber = trim(fgets(STDIN));
+  } while (! is_numeric($phoneNumber) || strlen((string)$phoneNumber) !== 10 );
 
-  fwrite($handle, $firstName . " " . $lastName . "|" . $phoneNumber);
+  fwrite($handle, $firstName . " " . $lastName . "|" . $phoneNumber . PHP_EOL);
 
   fclose($handle);
+
+  var_dump($phoneNumber);
 
   viewContacts();
   menuOptions();
 }
 
-
 function searchName()
 {
- 
+
   $contacts = readContacts();
 
   $contactsArray = explode("\n", $contacts);
@@ -160,11 +148,11 @@ function searchName()
 function deleteContact()
 {
 
-  // $fileName = "contacts.txt";
-  // $handle = fopen($fileName, 'a+');
-  // $contacts = fread($handle, filesize($fileName));
-  // fclose($handle);
-  // $contacts = trim($contacts);
+  $fileName = "contacts.txt";
+  $handle = fopen($fileName, 'a+');
+  $contacts = fread($handle, filesize($fileName));
+  fclose($handle);
+  $contacts = trim($contacts);
 
   $contacts = readContacts();
 
